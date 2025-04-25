@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Effect</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            margin: 0; /* Убирает отступы по умолчанию */
+            overflow: hidden; /* Убирает полосу прокрутки на body */
+        }
+
+        .matrix-text {
+            font-size: 20px; /* Размер шрифта для ASCII-арта */
+            text-shadow: 0 0 20px green, 0 0 30px green, 0 0 40px green;
+            white-space: pre-wrap; /* Позволяет переносить строки */
+            overflow: auto; /* Позволяет прокрутку */
+            max-height: 90vh; /* Ограничивает высоту контейнера */
+            width: 100%; /* Занимает всю ширину */
+            padding: 10px; /* Добавляет отступы внутри контейнера */
+            box-sizing: border-box; /* Учитывает отступы в ширине и высоте */
+            scrollbar-width: none; /* Скрывает полосу прокрутки для Firefox */
+        }
+
+        .matrix-text::-webkit-scrollbar {
+            display: none; /* Скрывает полосу прокрутки для Chrome, Safari, Opera */
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-text" id="matrixText"></div>
+
+    <script>
+        // Вставьте ваш ASCII-арт здесь
+        const text = `
+ /$$   /$$                                                                
+| $$  | $$                                                                
+| $$  | $$  /$$$$$$   /$$$$$$   /$$$$$$  /$$   /$$                        
+| $$$$$$$$ |____  $$ /$$__  $$ /$$__  $$| $$  | $$                        
+| $$__  $$  /$$$$$$$| $$  \ $$| $$  \ $$| $$  | $$                        
+| $$  | $$ /$$__  $$| $$  | $$| $$  | $$| $$  | $$                        
+| $$  | $$|  $$$$$$$| $$$$$$$/| $$$$$$$/|  $$$$$$$                        
+|__/  |__/ \_______/| $$____/ | $$____/  \____  $$                        
+                    | $$      | $$       /$$  | $$                        
+                    | $$      | $$      |  $$$$$$/                        
+                    |__/      |__/       \______/                         
+   /$$    /$$$$$$   /$$     /$$                                           
+ /$$$$   /$$__  $$ | $$    | $$                                           
+|_  $$  | $$  \__//$$$$$$  | $$$$$$$                                      
+  | $$  | $$$$$$$|_  $$_/  | $$__  $$                                     
+  | $$  | $$__  $$ | $$    | $$  \ $$                                     
+  | $$  | $$  \ $$ | $$ /$$| $$  | $$                                     
+ /$$$$$$|  $$$$$$/ |  $$$$/| $$  | $$                                     
+|______/ \______/   \___/  |__/  |__/                                     
+                                                                          
+                                                                          
+                                                                          
+ /$$$$$$$  /$$             /$$     /$$             /$$                    
+| $$__  $$|__/            | $$    | $$            | $$                    
+| $$  \ $$ /$$  /$$$$$$  /$$$$$$  | $$$$$$$   /$$$$$$$  /$$$$$$  /$$   /$$
+| $$$$$$$ | $$ /$$__  $$|_  $$_/  | $$__  $$ /$$__  $$ |____  $$| $$  | $$
+| $$__  $$| $$| $$  \__/  | $$    | $$  \ $$| $$  | $$  /$$$$$$$| $$  | $$
+| $$  \ $$| $$| $$        | $$ /$$| $$  | $$| $$  | $$ /$$__  $$| $$  | $$
+| $$$$$$$/| $$| $$        |  $$$$/| $$  | $$|  $$$$$$$|  $$$$$$$|  $$$$$$$
+|_______/ |__/|__/         \___/  |__/  |__/ \_______/ \_______/ \____  $$
+                                                                 /$$  | $$
+                                                                |  $$$$$$/
+                                                                 \______/ 
+   /$$                                                                    
+  | $$                                                                    
+ /$$$$$$    /$$$$$$                                                       
+|_  $$_/   /$$__  $$                                                      
+  | $$    | $$  \ $$                                                      
+  | $$ /$$| $$  | $$                                                      
+  |  $$$$/|  $$$$$$/                                                      
+   \___/   \______/                                                       
+                                                                          
+                                                                          
+                                                                          
+ /$$$$$$$$ /$$$$$$ /$$      /$$  /$$$$$$  /$$$$$$$  /$$$$$$               
+|__  $$__/|_  $$_/| $$$    /$$$ /$$__  $$| $$__  $$|_  $$_/               
+   | $$     | $$  | $$$$  /$$$$| $$  \ $$| $$  \ $$  | $$                 
+   | $$     | $$  | $$ $$/$$ $$| $$  | $$| $$  | $$  | $$                 
+   | $$     | $$  | $$  $$$| $$| $$  | $$| $$  | $$  | $$                 
+   | $$     | $$  | $$\  $ | $$| $$  | $$| $$  | $$  | $$                 
+   | $$    /$$$$$$| $$ \/  | $$|  $$$$$$/| $$$$$$$/ /$$$$$$               
+   |__/   |______/|__/     |__/ \______/ |_______/ |______/                
+        `;
+
+        const matrixTextElement = document.getElementById('matrixText');
+        const speed = 0.5; // Увеличьте скорость печати
+
+        function type() {
+            let index = 0;
+            function typeNext() {
+                if (index < text.length) {
+                    matrixTextElement.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(typeNext, speed);
+                } else {
+                    setTimeout(erase, 1000); // Задержка перед стиранием
+                }
+            }
+            typeNext();
+        }
+
+        function erase() {
+            let index = text.length;
+            function eraseNext() {
+                if (index > 0) {
+                    matrixTextElement.textContent = matrixTextElement.textContent.slice(0, -1);
+                    index--;
+                    setTimeout(eraseNext, speed); // Увеличьте скорость стирания
+                } else {
+                    setTimeout(type, 1000); // Задержка перед повторным набором
+                }
+            }
+            eraseNext();
+        }
+
+        type(); // Начинаем печатать
+    </script>
+</body>
+</html>
